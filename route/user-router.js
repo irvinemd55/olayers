@@ -24,7 +24,7 @@ userRouter.post('/api/signup', jsonParser, function(req, res, next){
 });
 
 userRouter.get('/api/login', basicAuthMiddleware, function(req, res, next){
-  debug('GET api/signup');
+  debug('GET api/login');
 
   req.user.generateToken()
   .then(token => res.send(token)
