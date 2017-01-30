@@ -11,7 +11,7 @@ const debug = require('debug')('olayers:server');
 const app = express();
 
 mongoose.Promise = require('bluebird');
-mongoose.connect = (process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(require('./route/user-router.js'));
@@ -34,6 +34,7 @@ app.use(function(err, req, res, next) {
 });
 
 const server = app.listen(process.env.PORT , () => {
+  debug('starting server');
   console.log('server oLayers is on!', process.env.PORT);
 });
 
