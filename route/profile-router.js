@@ -29,6 +29,7 @@ profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, ne
     vendor: req.body.vendor,
     fan: req.body.fan,
     userID: req.user._id.toString(),
+
   }).save()
   .then(profile => res.json(profile))
   .catch(next);
@@ -52,4 +53,5 @@ profileRouter.delete('/api/profilel/:id', bearerAuth, function(req, res, next){
   })
   .then(() => res.status(204).send())
   .catch(() => next(createError(404, 'didn\'t find the profile to remove')));
+
 });
