@@ -1,3 +1,13 @@
+
+const cors = require('cors');
+const morgan = require('morgan');
+const bluebird = require('bluebird');
+const express = require('express');
+const mongoose = require('mongoose');
+const debug = require('debug')('cfgram:server');
+
+const app = express();
+
 'use strict';
 
 require('dotevn').load();
@@ -37,3 +47,4 @@ const server = app.listen(process.env.PORT , () => {
 
 server.isRunning = true;
 module.exports = server;
+
