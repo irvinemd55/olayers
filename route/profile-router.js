@@ -45,13 +45,13 @@ profileRouter.get('/api/profile/:id', bearerAuth, function(req, res, next){
   .catch(() => next(createError(404, 'didn\'t find the profile')));
 });
 
-profileRouter.delete('/api/profilel/:id', bearerAuth, function(req, res, next){
-  debug('DELETE /api/profile/:id');
-  Profile.findOneAndRemove({
+profileRouter.get('/api/profile/me', bearerAuth, function(req, res, next){
+  debug('GET /api/profile/me');
+  Profile.findOne({
     userID: req.user._id.toString(),
-    _id: req.params.id,
+    _id: req.user.id,
   })
-  .then(() => res.status(204).send())
-  .catch(() => next(createError(404, 'didn\'t find the profile to remove')));
+  .then(profile => res.json(profile))
+  .catch(() => next(createError(404, 'didn\'t find the profile')));
 
 });
