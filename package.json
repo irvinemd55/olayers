@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
-    "debug": "DEBUG=cf* npm run test",
+    "debug": "DEBUG=ol* npm run test",
+    "lint": "./node_modules/eslint/bin/eslint.js .",
     "start": "node server.js"
   },
   "repository": {
@@ -24,6 +25,7 @@
   "homepage": "https://github.com/irvinemd55/olayers#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "eslint": "^3.14.1",
     "mocha": "^3.2.0",
     "superagent": "^3.4.1"
   },
