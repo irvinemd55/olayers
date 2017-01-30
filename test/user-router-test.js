@@ -4,7 +4,7 @@ require('./mock-assets/mock-env.js');
 const expect = require('chai').expect;
 const superagent = require('superagent');
 const User = require('../model/user.js');
-//const userMock = require('./lib/user-mocks.js');
+const userMock = require('./lib/user-mocks.js');
 const serverControl = require('./lib/server-control.js');
 const baseURL = `http://localhost:${process.env.PORT}`;
 require('../server.js');
@@ -84,7 +84,30 @@ describe('testing user-router', function() {
       });
     });
   });
+  describe('testing GET /api/login', function () {
+    before(userMock.bind(this));
 
+    it('should send back a token', (done) => {
+      superagent.get(`${baseURL}/api/login`)
+      .auth(this.tempUser.username, '1234')
+      .then(res => {
+        expect(res.status).to.equal(200);
+        expect(Boolean(res.text)).to.equal(true);
+        done();
+      })
+      .catch(done);
+    });
+    it('should give a 401 if not auth header', (done) => {
+      superagent.get(`${baseURL}/api/login`)
+      .auth('theseaintus', '1234')
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(401);
+        done();
+      })
+      .catch(done);
+    });
+  });
 
 
 
