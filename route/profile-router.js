@@ -7,11 +7,11 @@ const jsonParser = require('body-parser').json();
 
 const Profile = require('../model/profile.js');
 
-const bearerAuthMiddleware = require('../lib/bearer-auth-middleware.js');
+const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const profileRouter = module.exports = new Router();
 
-profileRouter.post('/api/profile', bearerAuthMiddleware, jsonParser, function(req, res, next){
+profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, next){
   debug('POST /api/profile');
   if(!req.body.name)
     return next(createError(400, 'requires name'));
@@ -29,6 +29,27 @@ profileRouter.post('/api/profile', bearerAuthMiddleware, jsonParser, function(re
     vendor: req.body.vendor,
     fan: req.body.fan,
     userID: req.user._id.toString(),
-  });
+  }).save()
+  .then(profile => res.json(profile))
+  .catch(next);
+});
 
+profileRouter.get('/api/profile/:id', bearerAuth, function(req, res, next){
+  debug('GET /api/profile/:id');
+  Profile.findOne({
+    userID: req.user._id.toString(),
+    _id: req.params.id,
+  })
+  .then(profile => res.json(profile))
+  .catch(() => next(createError(404, 'didn\'t find the profile')));
+});
+
+profileRouter.delete('/api/profilel/:id', bearerAuth, function(req, res, next){
+  debug('DELETE /api/profile/:id');
+  Profile.findOneAndRemove({
+    userID: req.user._id.toString(),
+    _id: req.params.id,
+  })
+  .then(() => res.status(204).send())
+  .catch(() => next(createError(404, 'didn\'t find the profile to remove')));
 });
