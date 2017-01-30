@@ -30,5 +30,4 @@ profileRouter.post('/api/profile', bearerAuthMiddleware, jsonParser, function(re
     fan: req.body.fan,
     userID: req.user._id.toString(),
   });
-
 });
