@@ -1,13 +1,3 @@
-
-const cors = require('cors');
-const morgan = require('morgan');
-const bluebird = require('bluebird');
-const express = require('express');
-const mongoose = require('mongoose');
-const debug = require('debug')('cfgram:server');
-
-const app = express();
-
 'use strict';
 
 require('dotevn').load();
@@ -26,6 +16,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(require('./route/user-router.js'));
 app.use(function(err, req, res, next) {
+  debug('error middleware');
   if(err.status) {
     res.status(err.status).send();
     return;
@@ -39,6 +30,7 @@ app.use(function(err, req, res, next) {
     return;
   }
   res.status(500).send();
+  next();
 });
 
 const server = app.listen(process.env.PORT , () => {
@@ -47,4 +39,3 @@ const server = app.listen(process.env.PORT , () => {
 
 server.isRunning = true;
 module.exports = server;
-
