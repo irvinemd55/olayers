@@ -1,6 +1,6 @@
 'use strict';
 
-require('dotevn').load();
+require('dotenv').load();
 
 const cors = require('cors');
 const morgan = require('morgan');
