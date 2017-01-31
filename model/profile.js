@@ -1,7 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const debug = require('debug')('olayers:profile');
+
 
 
 
@@ -18,6 +18,7 @@ const profileSchema = mongoose.Schema({
   vendor: {type: Boolean, required: true},
   fan: {type: Boolean, required: true},
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
+  //TODO posts array potentially needed in refactoring
 });
 
 module.exports = mongoose.model('profile', profileSchema);
