@@ -29,7 +29,6 @@ photoRouter.post('/api/photo', bearerAuth, jsonParser, function(req, res, next){
 
   }).save()
   .then(photo => {
-    console.log(res, 'sup playa');
     res.json(photo);
   })
   .catch(next);
