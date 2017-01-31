@@ -97,6 +97,7 @@ describe('testing user-router', function() {
       })
       .catch(done);
     });
+
     it('should give a 401 if not auth header', (done) => {
       superagent.get(`${baseURL}/api/login`)
       .auth('theseaintus', '1234')
