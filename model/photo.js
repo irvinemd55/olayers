@@ -5,6 +5,7 @@ const debug = require('debug')('olayers:photo');
 
 const photoSchema = mongoose.Schema({
   name: {type: String, required: true},
+  url: {type: String, required: true},
   dateTaken: {type: Date, required: true},
   //event: {type: String},
   location: {type: String},
