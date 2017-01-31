@@ -18,7 +18,6 @@ app.use(require('./route/user-router.js'));
 app.use(require('./route/profile-router.js'));
 app.use(function(err, req, res, next) {
   debug('error middleware');
-  console.log(err);
   if(err.status) {
     res.status(err.status).send();
     return;
