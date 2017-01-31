@@ -4,7 +4,7 @@
 require('./mock-assets/mock-env.js');
 const expect = require('chai').expect;
 const superagent = require('superagent');
-const User = require('../model/profile.js');
+const Profile = require('../model/profile.js');
 const userMock = require('./lib/user-mocks.js');
 const serverControl = require('./lib/server-control.js');
 const baseURL = `http://localhost:${process.env.PORT}`;
@@ -20,8 +20,28 @@ describe('testing profile-router', function () {
   });
 
   describe('testing POST /api/profile', function () {
+    before(userMock.bind(this));
     it('should respond with a profile', (done) => {
-      superagent.post(`${baseURL}/api/`)
-    })
-  })
+      superagent.post(`${baseURL}/api/profile`)
+      .send({
+        name: 'Bob James',
+        location: 'Seattle',
+        cosplayer: true,
+        vendor: true,
+        fan: false,
+      })
+      .set('Authorization',`Bearer ${this.tempToken}`)
+      .then(res => {
+        expect(res.status).to.equal(200);
+        expect(res.body.name).to.equal('Bob James');
+        expect(res.body.location).to.equal('Seattle');
+        expect(res.body.cosplayer).to.be.a('Boolean');
+        expect(res.body.vendor).to.be.a('Boolean');
+        expect(res.body.fan).to.be.a('Boolean');
+        expect(Boolean(res.body.dateJoined)).to.equal(true);
+        done();
+      })
+      .catch(done);
+    });
+  });
 });
