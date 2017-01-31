@@ -42,12 +42,14 @@ userSchema.methods.generateFindHash = function(){
   debug('generateFindHash');
   return new Promise((resolve, reject) => {
     let tries = 3;
+    console.log('something dope');
     let _generateFindHash = () => {
       this.findHash = crypto.randomBytes(32),toString('hex');
       this.save().then(() => resolve(this))
       .catch(err => {
-        if(tries < 1)
-          return reject(err);
+        if(tries < 1) {
+          console.log(err);
+          return reject(err); }
         tries--;
         _generateFindHash();
       });

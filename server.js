@@ -10,11 +10,12 @@ const debug = require('debug')('olayers:server');
 
 const app = express();
 
-mongoose.Promise = require('bluebird');
+mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(require('./route/user-router.js'));
+app.use(require('./route/profile-router.js'));
 app.use(function(err, req, res, next) {
   debug('error middleware');
   console.log(err);

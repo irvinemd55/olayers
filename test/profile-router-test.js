@@ -26,6 +26,7 @@ describe('testing profile-router', function () {
       .send({
         name: 'Bob James',
         location: 'Seattle',
+        costumesWorn: ['batman', 'neo'],
         cosplayer: true,
         vendor: true,
         fan: false,
@@ -35,6 +36,7 @@ describe('testing profile-router', function () {
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('Bob James');
         expect(res.body.location).to.equal('Seattle');
+        expect(res.body.costumesWorn[0]).to.equal('batman');
         expect(res.body.cosplayer).to.be.a('Boolean');
         expect(res.body.vendor).to.be.a('Boolean');
         expect(res.body.fan).to.be.a('Boolean');
