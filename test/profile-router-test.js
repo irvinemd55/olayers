@@ -85,6 +85,54 @@ describe('testing profile-router', function () {
     it('should return a 404 when profile not found', (done) => {
       let url = `${baseURL}/api/profile/hackID`;
       superagent.get(url)
+      .set('Authorization', `Bearer ${this.tempToken}`)
+      .then(done)
+      .catch(res => {
+        expect(res.status).to.equal(404);
+        done();
+      })
+      .catch(done);
+    });
+  });
+
+  describe('testing GET /api/profile/me', function() {
+    beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
+
+    it('should respond with my profile', (done) => {
+
+      let url = `${baseURL}/api/profile/me/myprofile`;
+      superagent.get(url)
+      .set('Authorization', `Bearer ${this.tempToken}`)
+      .then(res => {
+        expect(res.status).to.equal(200);
+        expect(res.body.userID).to.equal(this.tempUser._id.toString());
+        expect(res.body.name).to.equal(this.tempProfile.name);
+        expect(res.body.location).to.equal(this.tempProfile.location);
+        expect(res.body.costumesWorn[0]).to.equal(this.tempProfile.costumesWorn[0]);
+        expect(res.body.cosplayer).to.equal(this.tempProfile.cosplayer);
+        expect(res.body.vendor).to.equal(this.tempProfile.vendor);
+        expect(res.body.fan).to.equal(this.tempProfile.fan);
+        expect(Boolean(res.body.dateJoined)).to.equal(true);
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should resond with a 401 when no auth', (done) => {
+      let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
+      superagent.get(url)
+      .then(done)
+      .catch(res => {
+        expect(res.status).to.equal(401);
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should return a 404 when profile not found', (done) => {
+      let url = `${baseURL}/api/profile/hackID`;
+      superagent.get(url)
       .set('authorization', `Bearer ${this.tempToken}`)
       .then(done)
       .catch(res => {

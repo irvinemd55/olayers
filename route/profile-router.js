@@ -47,11 +47,10 @@ profileRouter.get('/api/profile/:id', bearerAuth, function(req, res, next){
   .catch(() => next(createError(404, 'didn\'t find the profile')));
 });
 
-profileRouter.get('/api/profile/me', bearerAuth, function(req, res, next){
+profileRouter.get('/api/profile/me/myprofile', bearerAuth, function(req, res, next){
   debug('GET /api/profile/me');
   Profile.findOne({
     userID: req.user._id.toString(),
-    _id: req.user.id,
   })
   .then(profile => res.json(profile))
   .catch(() => next(createError(404, 'didn\'t find the profile')));
