@@ -12,6 +12,7 @@ module.exports = function(done) {
     cosplayer: true,
     vendor: false,
     fan: true,
+    userID: this.tempUser._id.toString(),
   }).save()
   .then(profile => {
     this.tempProfile = profile;

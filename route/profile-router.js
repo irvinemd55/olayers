@@ -32,7 +32,6 @@ profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, ne
 
   }).save()
   .then(profile => {
-    console.log(res, 'sup playa');
     res.json(profile);
   })
   .catch(next);

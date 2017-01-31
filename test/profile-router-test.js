@@ -6,6 +6,7 @@ const expect = require('chai').expect;
 const superagent = require('superagent');
 const Profile = require('../model/profile.js');
 const userMock = require('./lib/user-mocks.js');
+const profileMock = require('./lib/profile-mock.js');
 const serverControl = require('./lib/server-control.js');
 const baseURL = `http://localhost:${process.env.PORT}`;
 require('../server.js');
@@ -52,18 +53,19 @@ describe('testing GET /api/profile/:id', function() {
   beforeEach(userMock.bind(this));
   beforeEach(profileMock.bind(this));
 
-  it('should respond with a gallery', (done) => {
+  it('should respond with a profile', (done) => {
     let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
     superagent.get(url)
-    .then(done)
-    .catch(res => {
+    .set('Authorization', `Bearer ${this.tempToken}`)
+    .then(res => {
       expect(res.status).to.equal(200);
+      expect(res.body.userID).to.equal(this.tempUser._id.toString());
       expect(res.body.name).to.equal(this.tempProfile.name);
       expect(res.body.location).to.equal(this.tempProfile.location);
       expect(res.body.costumesWorn[0]).to.equal(this.tempProfile.costumesWorn);
-      expect(res.body.cosplayer).to.be.a(this.tempProfile.cosplayer);
-      expect(res.body.vendor).to.be.a(this.tempProfile.vendor);
-      expect(res.body.fan).to.be.a(this.tempProfile.fan);
+      expect(res.body.cosplayer).to.equal(this.tempProfile.cosplayer);
+      expect(res.body.vendor).to.equal(this.tempProfile.vendor);
+      expect(res.body.fan).to.equal(this.tempProfile.fan);
       expect(Boolean(res.body.dateJoined)).to.equal(true);
       done();
     })
@@ -71,10 +73,10 @@ describe('testing GET /api/profile/:id', function() {
   });
 
   it('should resond with a 401', (done) => {
-    let url = `${baseURL}/api/prolfile/${this.tempProfile._id.toString()}`;
+    let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
     superagent.get(url)
     .then(done)
-    .cost(res => {
+    .catch(res => {
       expect(res.status).to.equal(401);
       done();
     })
