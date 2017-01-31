@@ -54,12 +54,12 @@ photoRouter.get('/api/post/photo', bearerAuth, function(req, res, next){
   .catch(() => next(createError(404, 'didn\'t find the photo')));
 });
 
- photoRouter.delete('/api/photo/:id', bearerAuth, functino(req, res, next){
-   debug('DELETE /api/photo/:id');
-   Photo.findOneAndRemove({
-     userID: req.user._id.toString(),
-     _id: req.params.id,
-   })
+photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
+  debug('DELETE /api/photo/:id');
+  Photo.findOneAndRemove({
+    userID: req.user._id.toString(),
+    _id: req.params.id,
+  })
    .then(() => res.status(204).send())
    .catch(() => next(createError(404, 'didn\t find the phot')));
- });
+});
