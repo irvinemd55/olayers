@@ -12,7 +12,7 @@ const profileSchema = mongoose.Schema({
   location: {type: String, required: true},
   interests: {type: Array},
   dateJoined: {type: Date, required: true, default: Date.now},
-  costumesWorn: {type: Array},
+  costumesWorn: {type: Array, required: true},
   eventsAttended: {type: Array},
   cosplayer: {type: Boolean, required: true},
   vendor: {type: Boolean, required: true},

@@ -26,6 +26,7 @@ describe('testing profile-router', function () {
       .send({
         name: 'Bob James',
         location: 'Seattle',
+        costumesWorn: ['batman', 'neo'],
         cosplayer: true,
         vendor: true,
         fan: false,
@@ -35,6 +36,7 @@ describe('testing profile-router', function () {
         expect(res.status).to.equal(200);
         expect(res.body.name).to.equal('Bob James');
         expect(res.body.location).to.equal('Seattle');
+        expect(res.body.costumesWorn[0]).to.equal('batman');
         expect(res.body.cosplayer).to.be.a('Boolean');
         expect(res.body.vendor).to.be.a('Boolean');
         expect(res.body.fan).to.be.a('Boolean');
@@ -43,5 +45,39 @@ describe('testing profile-router', function () {
       })
       .catch(done);
     });
+  });
+});
+
+describe('testing GET /api/profile/:id', function() {
+  beforeEach(userMock.bind(this));
+  beforeEach(profileMock.bind(this));
+
+  it('should respond with a gallery', (done) => {
+    let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
+    superagent.get(url)
+    .then(done)
+    .catch(res => {
+      expect(res.status).to.equal(200);
+      expect(res.body.name).to.equal(this.tempProfile.name);
+      expect(res.body.location).to.equal(this.tempProfile.location);
+      expect(res.body.costumesWorn[0]).to.equal(this.tempProfile.costumesWorn);
+      expect(res.body.cosplayer).to.be.a(this.tempProfile.cosplayer);
+      expect(res.body.vendor).to.be.a(this.tempProfile.vendor);
+      expect(res.body.fan).to.be.a(this.tempProfile.fan);
+      expect(Boolean(res.body.dateJoined)).to.equal(true);
+      done();
+    })
+    .catch(done);
+  });
+
+  it('should resond with a 401', (done) => {
+    let url = `${baseURL}/api/prolfile/${this.tempProfile._id.toString()}`;
+    superagent.get(url)
+    .then(done)
+    .cost(res => {
+      expect(res.status).to.equal(401);
+      done();
+    })
+    .catch(done);
   });
 });
