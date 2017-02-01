@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 const Profile = require('./profile.js');
 
-
-
 const postSchema = mongoose.Schema({
   description: {type: String, required: true},
   timePosted: {type: Date, required: true, default: Date.now},
@@ -12,7 +10,7 @@ const postSchema = mongoose.Schema({
   photoID: {type: mongoose.Schema.Types.ObjectId},
   //videoID: {type: mongoose.Schema.Types.ObjectId}, TODO stretch goal
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
-  profileID: {type: mongoose.Schema.Types.ObjectID, required: true},
+  profileID: {type: mongoose.Schema.Types.ObjectId, required: true},
 });
 
 postSchema.pre('save', function(next) {
@@ -24,6 +22,5 @@ postSchema.pre('save', function(next) {
   .then(() => next())
   .catch(next);
 });
-
 
 module.exports = mongoose.model('post', postSchema);

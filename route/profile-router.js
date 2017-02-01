@@ -29,7 +29,7 @@ profileRouter.post('/api/profiles', bearerAuth, jsonParser, function(req, res, n
     vendor: req.body.vendor,
     fan: req.body.fan,
     userID: req.user._id.toString(),
-
+    posts: req.body.posts,
   }).save()
   .then(profile => {
     res.json(profile);

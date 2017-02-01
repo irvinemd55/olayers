@@ -7,7 +7,7 @@ const User = require('../model/user.js');
 const Post = require('../model/post.js');
 const Profile = require('../model/profile.js');
 const userMock = require('./lib/user-mocks.js');
-//uncomment TODO: const profileMock = require('./lib/profile-mock.js');
+const profileMock = require('./lib/profile-mock.js');
 const postMock = require('./lib/post-mock.js');
 const serverControl = require('./lib/server-control.js');
 const baseURL = `http://localhost:${process.env.PORT}`;
@@ -26,11 +26,12 @@ describe('testing post-router', function() {
   });
 
   describe('testing POST /api/posts', function() {
-    before(userMock.bind(this));
-    //before(profileMock.bind(this));
+    beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
     it('should respond with a post', done => {
       superagent.post(`${baseURL}/api/posts`)
       .send({
+        profileID: this.tempProfile._id.toString(),
         description: 'best cosplay ever',
       })
       .set('Authorization', `Bearer ${this.tempToken}`)
@@ -72,16 +73,19 @@ describe('testing post-router', function() {
 
   describe('testing GET /api/posts/me/myposts', function() {
     beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
     beforeEach(postMock.bind(this));
     it('should respond with user\'s posts', done => {
       superagent.get(`${baseURL}/api/posts/me/myposts`)
       .set('Authorization', `Bearer ${this.tempToken}`)
       .then(res => {
         expect(res.status).to.equal(200);
-        expect(res.body.description).to.equal(this.tempPost.description);
-        expect(Boolean(res.body.timePosted)).to.equal(true);
-        expect(res.body.likes).to.equal(0);
-        expect(res.body.userID).to.equal(this.tempUser._id.toString());
+        expect(res.body).to.be.instanceof(Array);
+        expect(res.body[0].description).to.equal(this.tempPost.description);
+        expect(Boolean(res.body[0].timePosted)).to.equal(true);
+        expect(res.body[0].likes).to.equal(0);
+        expect(res.body[0].userID).to.equal(this.tempUser._id.toString());
+        expect(res.body[0].profileID).to.equal(this.tempProfile._id.toString());
         done();
       })
       .catch(done);
@@ -112,6 +116,7 @@ describe('testing post-router', function() {
 
   describe('testing GET /api/posts/:id', function() {
     beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
     beforeEach(postMock.bind(this));
 
     it('should respond with a post', done => {
@@ -122,6 +127,7 @@ describe('testing post-router', function() {
         expect(Boolean(res.body.timePosted)).to.equal(true);
         expect(res.body.likes).to.equal(0);
         expect(res.body.userID).to.equal(this.tempUser._id.toString());
+        expect(res.body.profileID).to.equal(this.tempProfile._id.toString());
         done();
       })
       .catch(done);
@@ -138,8 +144,48 @@ describe('testing post-router', function() {
     });
   });
 
+  describe('testing GET /api/posts', function() {
+    beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
+    beforeEach(postMock.bind(this));
+
+    it('should respond with all the posts', done => {
+      superagent.get(`${baseURL}/api/posts`)
+      .set('Authorization', `Bearer ${this.tempToken}`)
+      .then(res => {
+        expect(res.status).to.equal(200);
+        expect(res.body).to.be.instanceof(Array);
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should respond with 401 unauthorized', done => {
+      superagent.get(`${baseURL}/api/posts`)
+      .set('Authorization', `Bearer badtoken`)
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(401);
+        done();
+      })
+      .catch(done);
+    });
+
+    it('should respond with 404 not found', done => {
+      superagent.get(`${baseURL}/api/post`)
+      .set('Authorization', `Bearer ${this.tempToken}`)
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(404);
+        done();
+      })
+      .catch(done);
+    });
+  });
+
   describe('testing PUT /api/posts/me/myposts/:id', function() {
     beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
     beforeEach(postMock.bind(this));
 
     it('should respond with an updated post', done => {
@@ -153,6 +199,7 @@ describe('testing post-router', function() {
         expect(res.body.timePosted).to.not.equal(this.tempPost.timePosted);
         expect(res.body.likes).to.equal(0);
         expect(res.body.userID).to.equal(this.tempUser._id.toString());
+        expect(res.body.profileID).to.equal(this.tempProfile._id.toString());
         done();
       })
       .catch(done);
