@@ -19,7 +19,7 @@ postRouter.post('/api/posts', bearerAuth, jsonParser, function(req, res, next){
     description: req.body.description,
     timePosted: req.body.timePosted,
     likes: req.body.likes,
-    //photoID: req.photo._id.toString(),
+    photoID: req.body.photoID,
     userID: req.user._id.toString(),
     profileID: req.body.profileID,
   }).save()
