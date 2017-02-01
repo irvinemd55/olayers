@@ -37,7 +37,7 @@ profileRouter.post('/api/profiles', bearerAuth, jsonParser, function(req, res, n
   })
   .catch(next);
 });
-
+//this gets a users profile
 profileRouter.get('/api/profiles/:id', bearerAuth, function(req, res, next){
   debug('GET /api/profiles/:id');
   Profile.findOne({
@@ -47,7 +47,7 @@ profileRouter.get('/api/profiles/:id', bearerAuth, function(req, res, next){
   .then(profile => res.json(profile))
   .catch(() => next(createError(404, 'didn\'t find the profile')));
 });
-
+//this lets a user get their our profile
 profileRouter.get('/api/profiles/me/myprofile', bearerAuth, function(req, res, next){
   debug('GET /api/profiles/me');
   Profile.findOne({
@@ -56,7 +56,7 @@ profileRouter.get('/api/profiles/me/myprofile', bearerAuth, function(req, res, n
   .then(profile => res.json(profile))
   .catch(() => next(createError(404, 'didn\'t find the profile')));
 });
-
+//this lets a user view another users posts
 profileRouter.get('/api/profiles', bearerAuth, function(req, res, next) {
   debug('GET /api/profiles');
   Profile.find({})

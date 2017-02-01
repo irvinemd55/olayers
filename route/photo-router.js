@@ -146,6 +146,7 @@ photoRouter.post('/api/post/:id/photo'), bearerAuth, upload.single('image'), fun
 
 
 
+
 //deletes individual photo by ID
 photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
   debug('DELETE /api/photo/:id');
@@ -168,3 +169,4 @@ photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
   .then(() => res.sendStatus(204))
   .catch(next);
 });
+
