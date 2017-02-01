@@ -8,6 +8,7 @@ module.exports = function(done) {
   new Post({
     description: 'post' + Math.random(),
     userID: this.tempUser._id.toString(),
+    profileID: this.tempProfile._id.toString(),
   }).save()
   .then(post => {
     this.tempPost = post;

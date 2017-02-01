@@ -3,8 +3,6 @@
 const mongoose = require('mongoose');
 const Profile = require('./profile.js');
 
-
-
 const postSchema = mongoose.Schema({
   description: {type: String, required: true},
   timePosted: {type: Date, required: true, default: Date.now},
@@ -24,6 +22,5 @@ postSchema.pre('save', function(next) {
   .then(() => next())
   .catch(next);
 });
-
 
 module.exports = mongoose.model('post', postSchema);

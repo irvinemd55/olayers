@@ -21,6 +21,7 @@ postRouter.post('/api/posts', bearerAuth, jsonParser, function(req, res, next){
     likes: req.body.likes,
     //photoID: req.photo._id.toString(),
     userID: req.user._id.toString(),
+    profileID: req.body.profileID,
   }).save()
   .then(post => res.json(post))
   .catch(next);
@@ -37,15 +38,15 @@ postRouter.get('/api/posts/:id', function(req, res, next){
 // route for finding your own posts
 postRouter.get('/api/posts/me/myposts', bearerAuth, function(req, res, next){
   debug('GET /api/posts/me/myposts');
-  Post.findOne({
+  Post.find({
     userID: req.user._id.toString(),
   })
   .then(post => res.json(post))
   .catch(() => next(createError(404, 'didn\'t find the post')));
 });
 
-// route for finding post that belong to a profile
-postRouter.get('/api/posts', function(req, res, next) {
+// route for finding posts that belong to everyone
+postRouter.get('/api/posts', bearerAuth, function(req, res, next) {
   debug('GET /api/posts');
   Post.find({})
   .then(posts => res.json(posts))

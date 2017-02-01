@@ -17,11 +17,11 @@ app.use(morgan('dev'));
 app.use(require('./route/user-router.js'));
 app.use(require('./route/profile-router.js'));
 app.use(require('./route/post-router.js'));
+
 app.use(function(err, req, res, next) {
-  // console.log('err', err);
+  console.log(err.message);
   debug('error middleware');
   if(err.status) {
-    console.log(err.message);
     res.status(err.status).send();
     return;
   }
