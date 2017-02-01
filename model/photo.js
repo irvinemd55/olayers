@@ -1,12 +1,12 @@
 'use strict';
 
 const mongoose = require('mongoose');
-const debug = require('debug')('olayers:photo');
 
 const photoSchema = mongoose.Schema({
   name: {type: String, required: true},
-  url: {type: String, required: true},
   dateTaken: {type: Date, required: true},
+  objectKey: {type: String, required: true, unique: true},
+  imageURI: {type: String, required: true, unique: true},
   //event: {type: String},
   location: {type: String},
   description:{type: String},

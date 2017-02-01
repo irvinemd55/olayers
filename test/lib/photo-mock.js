@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('cfgram:photo-mock');
+const debug = require('debug')('olayers:photo-mock');
 const Photo = require('../../model/photo.js');
 
 module.exports = function(done){
@@ -10,6 +10,7 @@ module.exports = function(done){
     dateTaken: new Date(),
     url: 'http://fdsaf.jpg',
     userID: this.tempUser._id.toString(),
+    profileID: this.tempProfile._id.toString(),
   }).save()
   .then(photo => {
     this.tempPhoto = photo;
