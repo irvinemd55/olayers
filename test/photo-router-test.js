@@ -67,19 +67,19 @@ describe('testing photo-router', function () {
 
 
 
-  describe('testing DELETE /api/photos', function(){
-    beforeEach(userMock.bind(this));
-    beforeEach(profileMock.bind(this));
-    beforeEach(photoMock.bind(this));
-
-    it('should delete a photo', (done) => {
-      superagent.delete(`${baseURL}/api/profile/${this.tempProfile._id.toString()}/photo`)
-      .set('Authorization', `Bearer ${this.tempToken}`)
-      .then( res => {
-        expect(res.status).to.equal(204);
-        done();
-      })
-      .catch(done);
-    });
-  });
+  // describe('testing DELETE /api/photos', function(){
+  //   beforeEach(userMock.bind(this));
+  //   beforeEach(profileMock.bind(this));
+  //   beforeEach(photoMock.bind(this));
+  //
+  //   it('should delete a photo', (done) => {
+  //     superagent.delete(`${baseURL}/api/profile/${this.tempProfile._id.toString()}/photo`)
+  //     .set('Authorization', `Bearer ${this.tempToken}`)
+  //     .then( res => {
+  //       expect(res.status).to.equal(204);
+  //       done();
+  //     })
+  //     .catch(done);
+  //   });
+  // });
 });

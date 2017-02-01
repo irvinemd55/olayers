@@ -134,6 +134,7 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
 //   })
 //   .catch(next);
 // });
+//
 
 //   }).save()
 //   .then(photo => {
