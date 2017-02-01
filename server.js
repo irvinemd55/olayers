@@ -16,10 +16,15 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(require('./route/user-router.js'));
 app.use(require('./route/profile-router.js'));
+
 app.use(require('./route/photo-router.js'));
+
+app.use(require('./route/post-router.js'));
+
+
 app.use(function(err, req, res, next) {
+  console.log(err.message);
   debug('error middleware');
-  console.log(err);
   if(err.status) {
     res.status(err.status).send();
     return;

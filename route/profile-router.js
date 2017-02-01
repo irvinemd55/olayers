@@ -11,8 +11,8 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 const profileRouter = module.exports = new Router();
 
-profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, next){
-  debug('POST /api/profile');
+profileRouter.post('/api/profiles', bearerAuth, jsonParser, function(req, res, next){
+  debug('POST /api/profiles');
   if(!req.body.name)
     return next(createError(400, 'requires name'));
 
@@ -29,7 +29,7 @@ profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, ne
     vendor: req.body.vendor,
     fan: req.body.fan,
     userID: req.user._id.toString(),
-
+    posts: req.body.posts,
   }).save()
   .then(profile => {
     res.json(profile);
@@ -37,8 +37,8 @@ profileRouter.post('/api/profile', bearerAuth, jsonParser, function(req, res, ne
   .catch(next);
 });
 
-profileRouter.get('/api/profile/:id', bearerAuth, function(req, res, next){
-  debug('GET /api/profile/:id');
+profileRouter.get('/api/profiles/:id', bearerAuth, function(req, res, next){
+  debug('GET /api/profiles/:id');
   Profile.findOne({
     userID: req.user._id.toString(),
     _id: req.params.id,
@@ -47,13 +47,19 @@ profileRouter.get('/api/profile/:id', bearerAuth, function(req, res, next){
   .catch(() => next(createError(404, 'didn\'t find the profile')));
 });
 
-profileRouter.get('/api/profile/me', bearerAuth, function(req, res, next){
-  debug('GET /api/profile/me');
+profileRouter.get('/api/profiles/me/myprofile', bearerAuth, function(req, res, next){
+  debug('GET /api/profiles/me');
   Profile.findOne({
     userID: req.user._id.toString(),
-    _id: req.user.id,
   })
   .then(profile => res.json(profile))
   .catch(() => next(createError(404, 'didn\'t find the profile')));
+});
 
+profileRouter.get('/api/profiles', bearerAuth, function(req, res, next) {
+  debug('GET /api/profiles');
+  Profile.find({})
+  .populate('posts')
+  .then(profiles => res.json(profiles))
+  .catch(err => next(createError(404, err.message)));
 });

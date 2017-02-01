@@ -27,7 +27,6 @@ describe('testing user-router', function() {
         password: '1234',
       })
       .then(res => {
-        console.log('token:', res.text);
         expect(res.status).to.equal(200);
         expect(Boolean(res.text)).to.equal(true);
         done();

@@ -10,7 +10,7 @@ const bearerAuth = require('../lib/bearer-auth-middleware');
 
 const postRouter = module.exports = new Router();
 //route for creating a new post
-postRouter.post('api/posts', bearerAuth, jsonParser, function(req, res, next){
+postRouter.post('/api/posts', bearerAuth, jsonParser, function(req, res, next){
   debug('POST api/posts');
   if(!req.body.description)
     return next(createError(400, 'requires description'));
@@ -19,35 +19,43 @@ postRouter.post('api/posts', bearerAuth, jsonParser, function(req, res, next){
     description: req.body.description,
     timePosted: req.body.timePosted,
     likes: req.body.likes,
-    photoID: req.photo._id.toString(),
+    //photoID: req.photo._id.toString(),
     userID: req.user._id.toString(),
+    profileID: req.body.profileID,
   }).save()
-    .then(post => res.json(post))
-    .catch(next);
+  .then(post => res.json(post))
+  .catch(next);
 });
-//route for finding a users posts
-postRouter.get('/api/posts/:id', bearerAuth, function(req, res, next){
+
+//route for finding a user's posts (does not need auth)
+postRouter.get('/api/posts/:id', function(req, res, next){
   debug('GET /api/posts/:id');
-  Post.findOne({
+  Post.findById(req.params.id)
+  .then(post => res.json(post))
+  .catch(() => next(createError(404, 'not found')));
+});
+
+// route for finding your own posts
+postRouter.get('/api/posts/me/myposts', bearerAuth, function(req, res, next){
+  debug('GET /api/posts/me/myposts');
+  Post.find({
     userID: req.user._id.toString(),
-    _id: req.params.id,
   })
   .then(post => res.json(post))
   .catch(() => next(createError(404, 'didn\'t find the post')));
 });
-//route for finding your own posts
-postRouter.get('/api/posts/me', bearerAuth, function(req, res, next){
-  debug('GET /api/posts/me');
-  Post.findOne({
-    userID: req.user._id.toString(),
-    _id: req.user.id,
-  })
-  .then(post => res.json(post))
-  .catch(() => next(createError(404, 'didn\'t find the post')));
+
+// route for finding posts that belong to everyone
+postRouter.get('/api/posts', bearerAuth, function(req, res, next) {
+  debug('GET /api/posts');
+  Post.find({})
+  .then(posts => res.json(posts))
+  .catch(err => next(createError(404, err.message)));
 });
+
 //route for editing your own posts
-postRouter.put('/api/posts/me/:id', bearerAuth, function(req, res, next){
-  debug('PUT /api/posts/me/:id');
+postRouter.put('/api/posts/me/myposts/:id', bearerAuth, jsonParser, function(req, res, next){
+  debug('PUT /api/posts/me/myposts/:id');
   Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
   .then(post => res.json(post))
   .catch(() => next(createError(404, 'didn\'t find the post')))

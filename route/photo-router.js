@@ -85,6 +85,7 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
 
 
 
+
 // photoRouter.post('/api/profile/:id/photo', bearerAuth, jsonParser, function(req, res, next){
 //   debug('POST /api/photo');
 //   if(!req.body.name)
@@ -108,7 +109,15 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
 //   .catch(next);
 // });
 
-photoRouter.get('/api/profile/photo', bearerAuth, function(req, res, next){
+  }).save()
+  .then(photo => {
+    res.json(photo);
+  })
+  .catch(next);
+});
+
+
+photoRouter.get('/api/profiles/photo', bearerAuth, function(req, res, next){
   debug('GET /api/photo/:id');
   Photo.findOne({
     postID: req.post._id.toString(),
@@ -134,6 +143,11 @@ photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
     userID: req.user._id.toString(),
     _id: req.params.id,
   })
+
   .then(() => res.status(204).send())
   .catch(() => next(createError(404, 'didn\t find the phot')));
+
+   .then(() => res.status(204).send())
+   .catch(() => next(createError(404, 'didn\t find the phot')));
+
 });
