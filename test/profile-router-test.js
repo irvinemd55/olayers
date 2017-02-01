@@ -20,10 +20,10 @@ describe('testing profile-router', function () {
     .catch(done);
   });
 
-  describe('testing POST /api/profile', function () {
+  describe('testing POST /api/profiles', function () {
     before(userMock.bind(this));
     it('should respond with a profile', (done) => {
-      superagent.post(`${baseURL}/api/profile`)
+      superagent.post(`${baseURL}/api/profiles`)
       .send({
         name: 'Bob James',
         location: 'Seattle',
@@ -48,12 +48,12 @@ describe('testing profile-router', function () {
     });
   });
 
-  describe('testing GET /api/profile/:id', function() {
+  describe('testing GET /api/profiles/:id', function() {
     beforeEach(userMock.bind(this));
     beforeEach(profileMock.bind(this));
 
     it('should respond with a profile', (done) => {
-      let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
+      let url = `${baseURL}/api/profiles/${this.tempProfile._id.toString()}`;
       superagent.get(url)
       .set('authorization', `Bearer ${this.tempToken}`)
       .then(res => {
@@ -72,7 +72,7 @@ describe('testing profile-router', function () {
     });
 
     it('should resond with a 401', (done) => {
-      let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
+      let url = `${baseURL}/api/profiles/${this.tempProfile._id.toString()}`;
       superagent.get(url)
       .then(done)
       .catch(res => {
@@ -83,7 +83,7 @@ describe('testing profile-router', function () {
     });
 
     it('should return a 404 when profile not found', (done) => {
-      let url = `${baseURL}/api/profile/hackID`;
+      let url = `${baseURL}/api/profiles/hackID`;
       superagent.get(url)
       .set('Authorization', `Bearer ${this.tempToken}`)
       .then(done)
@@ -95,13 +95,13 @@ describe('testing profile-router', function () {
     });
   });
 
-  describe('testing GET /api/profile/me', function() {
+  describe('testing GET /api/profiles/me', function() {
     beforeEach(userMock.bind(this));
     beforeEach(profileMock.bind(this));
 
     it('should respond with my profile', (done) => {
 
-      let url = `${baseURL}/api/profile/me/myprofile`;
+      let url = `${baseURL}/api/profiles/me/myprofile`;
       superagent.get(url)
       .set('Authorization', `Bearer ${this.tempToken}`)
       .then(res => {
@@ -120,7 +120,7 @@ describe('testing profile-router', function () {
     });
 
     it('should resond with a 401 when no auth', (done) => {
-      let url = `${baseURL}/api/profile/${this.tempProfile._id.toString()}`;
+      let url = `${baseURL}/api/profiles/${this.tempProfile._id.toString()}`;
       superagent.get(url)
       .then(done)
       .catch(res => {
@@ -131,7 +131,7 @@ describe('testing profile-router', function () {
     });
 
     it('should return a 404 when profile not found', (done) => {
-      let url = `${baseURL}/api/profile/hackID`;
+      let url = `${baseURL}/api/profiles/hackID`;
       superagent.get(url)
       .set('authorization', `Bearer ${this.tempToken}`)
       .then(done)

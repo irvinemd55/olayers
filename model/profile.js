@@ -18,7 +18,7 @@ const profileSchema = mongoose.Schema({
   vendor: {type: Boolean, required: true},
   fan: {type: Boolean, required: true},
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
-  //TODO posts array potentially needed in refactoring
+  posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
 });
 
 module.exports = mongoose.model('profile', profileSchema);
