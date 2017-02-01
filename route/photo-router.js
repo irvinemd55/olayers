@@ -2,22 +2,24 @@
 
 const fs = require('fs');
 const path = require('path');
+
 const del = require('del');
 const AWS = require('aws-sdk');
 const multer = require('multer');
 const createError = require('http-errors');
 const debug = require('debug')('olayers:photo-router');
+
 const Router = require('express').Router;
-const jsonParser = require('body-parser').json();
+
 
 const Photo = require('../model/photo.js');
-const Profile = require('../model/profile');
+const Profile = require('../model/profile.js');
 
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 AWS.config.setPromisesDependency(require('bluebird'));
 
-const upload = multer({dest: `${__dirname}/../assets/image`});
+const upload = multer({dest: dataDir});
 const s3 = new AWS.S3();
 const dataDir = `${__dirname}/../data`;
 
@@ -34,6 +36,7 @@ function s3Promise(params){
 }
 
 photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), function(req, res, next){
+  debug('hit POST route /api/profile/:pid/photo');
   if(!req.file)
     return next(createError(400, 'no file'));
 
@@ -58,6 +61,7 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
 })
 .catch(err => err.status ? Promise.reject(err) : Promise.reject(createError(500, err.message)))
 .then(s3data => {
+
   del([`${dataDir}/*`]);
   let photoData = {
     name: req.body.name,
@@ -69,7 +73,7 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
     userID: req.user._id.toString(),
     profileID: req.profile._id.toString(),
   };
-  return new Photo(photoData);
+  return new Photo(photoData).save();
 })
 .then(photo => {
   tempPhoto = photo;
@@ -82,6 +86,28 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
   next(err);
 });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -109,45 +135,45 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
 //   .catch(next);
 // });
 
-  }).save()
-  .then(photo => {
-    res.json(photo);
-  })
-  .catch(next);
-});
-
-
-photoRouter.get('/api/profiles/photo', bearerAuth, function(req, res, next){
-  debug('GET /api/photo/:id');
-  Photo.findOne({
-    postID: req.post._id.toString(),
-    _id: req.params.id,
-  })
-  .then(photo => res.json(photo))
-  .catch(() => next(createError(404, 'didn\'t find the photo')));
-});
-
-photoRouter.get('/api/post/photo', bearerAuth, function(req, res, next){
-  debug('GET /api/photo/:id');
-  Photo.findOne({
-    profileID: req.profile._id.toString(),
-    _id: req.params.id,
-  })
-  .then(photo => res.json(photo))
-  .catch(() => next(createError(404, 'didn\'t find the photo')));
-});
-
-photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
-  debug('DELETE /api/photo/:id');
-  Photo.findOneAndRemove({
-    userID: req.user._id.toString(),
-    _id: req.params.id,
-  })
-
-  .then(() => res.status(204).send())
-  .catch(() => next(createError(404, 'didn\t find the phot')));
-
-   .then(() => res.status(204).send())
-   .catch(() => next(createError(404, 'didn\t find the phot')));
-
-});
+//   }).save()
+//   .then(photo => {
+//     res.json(photo);
+//   })
+//   .catch(next);
+// });
+//
+//
+// photoRouter.get('/api/profiles/photo', bearerAuth, function(req, res, next){
+//   debug('GET /api/photo/:id');
+//   Photo.findOne({
+//     postID: req.post._id.toString(),
+//     _id: req.params.id,
+//   })
+//   .then(photo => res.json(photo))
+//   .catch(() => next(createError(404, 'didn\'t find the photo')));
+// });
+//
+// photoRouter.get('/api/post/photo', bearerAuth, function(req, res, next){
+//   debug('GET /api/photo/:id');
+//   Photo.findOne({
+//     profileID: req.profile._id.toString(),
+//     _id: req.params.id,
+//   })
+//   .then(photo => res.json(photo))
+//   .catch(() => next(createError(404, 'didn\'t find the photo')));
+// });
+//
+// photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
+//   debug('DELETE /api/photo/:id');
+//   Photo.findOneAndRemove({
+//     userID: req.user._id.toString(),
+//     _id: req.params.id,
+//   })
+//
+//   .then(() => res.status(204).send())
+//   .catch(() => next(createError(404, 'didn\t find the phot')));
+//
+//    .then(() => res.status(204).send())
+//    .catch(() => next(createError(404, 'didn\t find the phot')));
+//
+// });
