@@ -11,7 +11,7 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 
 const Photo = require('../model/photo.js');
-const Profile = require('../model/profile');
+const Profile = require('../model/profile.js');
 
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
@@ -108,46 +108,46 @@ photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), 
 //   })
 //   .catch(next);
 // });
-
-  }).save()
-  .then(photo => {
-    res.json(photo);
-  })
-  .catch(next);
-});
-
-
-photoRouter.get('/api/profiles/photo', bearerAuth, function(req, res, next){
-  debug('GET /api/photo/:id');
-  Photo.findOne({
-    postID: req.post._id.toString(),
-    _id: req.params.id,
-  })
-  .then(photo => res.json(photo))
-  .catch(() => next(createError(404, 'didn\'t find the photo')));
-});
-
-photoRouter.get('/api/post/photo', bearerAuth, function(req, res, next){
-  debug('GET /api/photo/:id');
-  Photo.findOne({
-    profileID: req.profile._id.toString(),
-    _id: req.params.id,
-  })
-  .then(photo => res.json(photo))
-  .catch(() => next(createError(404, 'didn\'t find the photo')));
-});
-
-photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
-  debug('DELETE /api/photo/:id');
-  Photo.findOneAndRemove({
-    userID: req.user._id.toString(),
-    _id: req.params.id,
-  })
-
-  .then(() => res.status(204).send())
-  .catch(() => next(createError(404, 'didn\t find the phot')));
-
-   .then(() => res.status(204).send())
-   .catch(() => next(createError(404, 'didn\t find the phot')));
-
-});
+// 
+//   }).save()
+//   .then(photo => {
+//     res.json(photo);
+//   })
+//   .catch(next);
+// });
+//
+//
+// photoRouter.get('/api/profiles/photo', bearerAuth, function(req, res, next){
+//   debug('GET /api/photo/:id');
+//   Photo.findOne({
+//     postID: req.post._id.toString(),
+//     _id: req.params.id,
+//   })
+//   .then(photo => res.json(photo))
+//   .catch(() => next(createError(404, 'didn\'t find the photo')));
+// });
+//
+// photoRouter.get('/api/post/photo', bearerAuth, function(req, res, next){
+//   debug('GET /api/photo/:id');
+//   Photo.findOne({
+//     profileID: req.profile._id.toString(),
+//     _id: req.params.id,
+//   })
+//   .then(photo => res.json(photo))
+//   .catch(() => next(createError(404, 'didn\'t find the photo')));
+// });
+//
+// photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
+//   debug('DELETE /api/photo/:id');
+//   Photo.findOneAndRemove({
+//     userID: req.user._id.toString(),
+//     _id: req.params.id,
+//   })
+//
+//   .then(() => res.status(204).send())
+//   .catch(() => next(createError(404, 'didn\t find the phot')));
+//
+//    .then(() => res.status(204).send())
+//    .catch(() => next(createError(404, 'didn\t find the phot')));
+//
+// });
