@@ -7,7 +7,7 @@ const postSchema = mongoose.Schema({
   description: {type: String, required: true},
   timePosted: {type: Date, required: true, default: Date.now},
   likes: {type: Number, required: true, default: 0},
-  photoID: {type: mongoose.Schema.Types.ObjectId},
+  photoID: {type: mongoose.Schema.Types.ObjectId, ref: 'photo'},
   //videoID: {type: mongoose.Schema.Types.ObjectId}, TODO stretch goal
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
   profileID: {type: mongoose.Schema.Types.ObjectId, required: true},
