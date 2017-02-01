@@ -12,7 +12,7 @@ const postSchema = mongoose.Schema({
   photoID: {type: mongoose.Schema.Types.ObjectId},
   //videoID: {type: mongoose.Schema.Types.ObjectId}, TODO stretch goal
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
-  profileID: {type: mongoose.Schema.Types.ObjectID, required: true},
+  profileID: {type: mongoose.Schema.Types.ObjectId, required: true},
 });
 
 postSchema.pre('save', function(next) {

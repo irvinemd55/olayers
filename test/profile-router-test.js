@@ -143,4 +143,41 @@ describe('testing profile-router', function () {
     });
   });
 
+  describe('testing GET /api/profiles', function() {
+    beforeEach(userMock.bind(this));
+    beforeEach(profileMock.bind(this));
+    it.only('should respond with all profiles', done => {
+      superagent.get(`${baseURL}/api/profiles`)
+      .set('Authorization', `Bearer ${this.tempToken}`)
+      .then(res => {
+        expect(res.status).to.equal(200);
+        expect(res.body).to.be.instanceof(Array);
+        expect(res.body[0]._id).to.equal(this.tempProfile._id.toString());
+        done();
+      })
+      .catch(done);
+    });
+
+    it.only('should respond with 401', done => {
+      superagent.get(`${baseURL}/api/profiles`)
+      .set('Authorization', `Bearer badtoken`)
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(401);
+        done();
+      })
+      .catch(done);
+    });
+
+    it.only('should respond with 404', done => {
+      superagent.get(`${baseURL}/api/profile`)
+      .set('Authorization', `Bearer ${this.tempToken}`)
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(404);
+        done();
+      })
+      .catch(done);
+    });
+  });
 });
