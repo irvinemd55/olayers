@@ -20,9 +20,9 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 
 AWS.config.setPromisesDependency(require('bluebird'));
 
-const upload = multer({dest: dataDir});
 const s3 = new AWS.S3();
 const dataDir = `${__dirname}/../data`;
+const upload = multer({dest: dataDir});
 
 
 const photoRouter = module.exports = new Router();
@@ -169,4 +169,3 @@ photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
   .then(() => res.sendStatus(204))
   .catch(next);
 });
-
