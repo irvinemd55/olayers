@@ -21,7 +21,7 @@ app.use(function(err, req, res, next) {
   // console.log('err', err);
   debug('error middleware');
   if(err.status) {
-    console.log(err.status);
+    console.log(err.message);
     res.status(err.status).send();
     return;
   }
