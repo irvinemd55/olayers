@@ -22,7 +22,7 @@ describe('testing photo-router', function () {
   describe('testing POST /api/profile/:id/photo', function () {
     before(userMock.bind(this));
     before(profileMock.bind(this));
-    it.only('should respond with a photo', (done) => {
+    it('should respond with a photo', (done) => {
       superagent.post(`${baseURL}/api/profile/${this.tempProfile._id.toString()}/photo`)
       .send({
         name: 'taco tuesday',
@@ -42,4 +42,23 @@ describe('testing photo-router', function () {
       .catch(done);
     });
   });
-});
+
+
+
+
+//   describe('testing DELETE /api/photos', function(){
+//     beforeEach(userMock.bind(this));
+//     beforeEach(profileyMock.bind(this));
+//     beforeEach(photoMock.bind(this));
+//
+//     it('should delete a photo', (done) => {
+//       superagent.delete(`${baseURL}/api/profile/${this.tempProfile._id.toString()}/photo`)
+//       .set('Authorization', `Bearer ${this.tempToken}`)
+//       .then( res => {
+//         expect(res.status).to.equal(204);
+//         done();
+//       })
+//       .catch(done);
+//     });
+//   });
+// });
