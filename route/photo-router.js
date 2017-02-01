@@ -34,7 +34,7 @@ photoRouter.post('/api/photo', bearerAuth, jsonParser, function(req, res, next){
   .catch(next);
 });
 
-photoRouter.get('/api/profile/photo', bearerAuth, function(req, res, next){
+photoRouter.get('/api/profiles/photo', bearerAuth, function(req, res, next){
   debug('GET /api/photo/:id');
   Photo.findOne({
     postID: req.post._id.toString(),

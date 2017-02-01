@@ -44,6 +44,14 @@ postRouter.get('/api/posts/me/myposts', bearerAuth, function(req, res, next){
   .catch(() => next(createError(404, 'didn\'t find the post')));
 });
 
+// route for finding post that belong to a profile
+postRouter.get('/api/posts', function(req, res, next) {
+  debug('GET /api/posts');
+  Post.find({})
+  .then(posts => res.json(posts))
+  .catch(err => next(createError(404, err.message)));
+});
+
 //route for editing your own posts
 postRouter.put('/api/posts/me/myposts/:id', bearerAuth, jsonParser, function(req, res, next){
   debug('PUT /api/posts/me/myposts/:id');
