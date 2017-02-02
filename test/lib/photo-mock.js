@@ -7,10 +7,11 @@ module.exports = function(done){
   debug('mock photo');
   new Photo({
     name: 'taco tuesday',
-    dateTaken: new Date(),
-    url: 'http://fdsaf.jpg',
+    imageURI: 'http://fdsaf.jpg',
+    objectKey: 'whatever',
     userID: this.tempUser._id.toString(),
     profileID: this.tempProfile._id.toString(),
+    postID: this.tempPost._id.toString(),
   }).save()
   .then(photo => {
     this.tempPhoto = photo;
