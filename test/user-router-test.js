@@ -85,7 +85,6 @@ describe('testing user-router', function() {
   });
   describe('testing GET /api/login', function () {
     before(userMock.bind(this));
-
     it('should send back a token', (done) => {
       superagent.get(`${baseURL}/api/login`)
       .auth(this.tempUser.username, '1234')
@@ -96,7 +95,16 @@ describe('testing user-router', function() {
       })
       .catch(done);
     });
-
+    it('incorrect password should give a 401 unauthorized', (done) => {
+      superagent.get(`${baseURL}/api/login`)
+      .auth(this.tempUser.username, '4321')
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(401);
+        done();
+      })
+      .catch(done);
+    });
     it('should give a 401 if not auth header', (done) => {
       superagent.get(`${baseURL}/api/login`)
       .auth('theseaintus', '1234')
@@ -107,9 +115,15 @@ describe('testing user-router', function() {
       })
       .catch(done);
     });
+    it('should give a 401 if no auth header sent', done => {
+      superagent.get(`${baseURL}/api/login`)
+      .then(done)
+      .catch(err => {
+        expect(err.status).to.equal(401);
+        done();
+      })
+      .catch(done);
+    });
   });
-
-
-
 
 });
