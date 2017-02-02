@@ -1,4 +1,6 @@
 #Security App Git Ignore
+coverage
+html-reporter
 .env
 db
 # Created by https://www.gitignore.io/api/vim,windows,osx,linux,node,git
