@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha",
+    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
     "debug": "DEBUG=ol* npm run test",
     "lint": "./node_modules/eslint/bin/eslint.js .",
     "start": "node server.js"
@@ -26,7 +26,9 @@
   "devDependencies": {
     "aws-sdk-mock": "^1.6.1",
     "chai": "^3.5.0",
+    "coveralls": "^2.11.15",
     "eslint": "^3.14.1",
+    "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "superagent": "^3.4.1"
   },
