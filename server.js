@@ -23,8 +23,8 @@ app.use(require('./route/post-router.js'));
 
 
 app.use(function(err, req, res, next) {
-  console.log(err.status, err.message);
   debug('error middleware');
+  console.log(err.status, err.message);
   if(err.status) {
     res.status(err.status).send();
     return;
