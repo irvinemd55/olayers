@@ -76,7 +76,6 @@ describe('testing profile-router', function () {
       it('should respond with a profile', (done) => {
         let url = `${baseURL}/api/profiles/${this.tempProfile._id.toString()}`;
         superagent.get(url)
-        .set('authorization', `Bearer ${this.tempToken}`)
         .then(res => {
           expect(res.status).to.equal(200);
           expect(res.body.userID).to.equal(this.tempUser._id.toString());
@@ -92,21 +91,9 @@ describe('testing profile-router', function () {
         .catch(done);
       });
 
-      it('should respond with a 401', (done) => {
-        let url = `${baseURL}/api/profiles/${this.tempProfile._id.toString()}`;
-        superagent.get(url)
-        .then(done)
-        .catch(res => {
-          expect(res.status).to.equal(401);
-          done();
-        })
-        .catch(done);
-      });
-
       it('should return a 404 when profile not found', (done) => {
         let url = `${baseURL}/api/profiles/hackID`;
         superagent.get(url)
-        .set('Authorization', `Bearer ${this.tempToken}`)
         .then(done)
         .catch(res => {
           expect(res.status).to.equal(404);
