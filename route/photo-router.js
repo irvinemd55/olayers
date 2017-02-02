@@ -38,119 +38,111 @@ function s3Promise(params){
 
 
 //Post routing for setting up a profile photo using profile and photo models
-photoRouter.post('/api/profile/:id/photo'), bearerAuth, upload.single('image'), function(req, res, next){
-  debug('hit POST route /api/profile/:pid/photo');
+photoRouter.post('/api/profiles/:id/photos', bearerAuth, upload.single('file'), function(req, res, next){
+  debug('hit POST route /api/profiles/:id/photos');
   if(!req.file)
     return next(createError(400, 'no file'));
 
-  let ext = path.extname(req.file.originalname);
-
-  let params = {
-    ACL: 'public-read',
-    Bucket: 'olayers-staging',
-    Key: `${req.file.filename}${ext}`,
-    Body: fs.createReadStream(req.file.path),
-  };
   let tempProfile = null;
   let tempPhoto = null;
-  Profile.findById(req.params.profileID)
-.catch(err => Promise.reject(createError(404, err.message)))
-.then(profile => {
-  if(profile.userID.toString() !== req.user._id.toString()) {
-    return Promise.reject(createError(401, 'User not authorized'));
-  }
-  tempProfile = profile;
-  return s3Promise(params);
-})
-.catch(err => err.status ? Promise.reject(err) : Promise.reject(createError(500, err.message)))
-.then(s3data => {
+  Profile.findById(req.params.id)
+  .catch(err => Promise.reject(createError(404, err.message)))
+  .then(profile => {
+    if(profile.userID.toString() !== req.user._id.toString()) {
+      return Promise.reject(createError(401, 'User not authorized'));
+    }
+    tempProfile = profile;
+    return s3Promise({
+      ACL: 'public-read',
+      Bucket: process.env.AWS_BUCKET,
+      Key: `${req.file.filename}${path.extname(req.file.originalname)}`,
+      Body: fs.createReadStream(req.file.path),
+    });
+  })
+  .catch(err => err.status ? Promise.reject(err) : Promise.reject(createError(500, err.message)))
+  .then(s3data => {
 
-  del([`${dataDir}/*`]);
-  let photoData = {
-    name: req.body.name,
-    objectKey: s3data.Key,
-    imageURI: s3data.Location,
-    location: req.body.location,
-    dateTaken: req.body.dateTaken,
-    description: req.body.description,
-    userID: req.user._id.toString(),
-    profileID: req.profile._id.toString(),
-  };
-  return new Photo(photoData).save();
-})
-.then(photo => {
-  tempPhoto = photo;
-  tempProfile.photoID = tempPhoto._id.toString();
-  return tempProfile.save();
-})
-.then(() => res.json(tempPhoto))
-.catch(err => {
-  del([`${dataDir}/*`]);
-  next(err);
+    del([`${dataDir}/*`]);
+    let photoData = {
+      name: req.body.name,
+      objectKey: s3data.Key,
+      imageURI: s3data.Location,
+      location: req.body.location,
+      dateUploaded: req.body.dateUploaded,
+      description: req.body.description,
+      userID: req.user._id.toString(),
+      profileID: req.body.profileID.toString(),
+      profilePic: req.body.profilePic,
+    };
+    return new Photo(photoData).save();
+  })
+  .then(photo => {
+    tempPhoto = photo;
+    tempProfile.photoID = tempPhoto._id.toString();
+    return tempProfile.save();
+  })
+  .then(() => res.json(tempPhoto))
+  .catch(err => {
+    del([`${dataDir}/*`]);
+    next(err);
+  });
 });
-};
 
 
 //Posts images on user posts using post and photo models
-photoRouter.post('/api/post/:id/photo'), bearerAuth, upload.single('image'), function(req, res, next){
-  debug('hit POST route /api/post/:id/photo');
+photoRouter.post('/api/posts/:id/photos', bearerAuth, upload.single('file'), function(req, res, next){
+  debug('hit POST route /api/posts/:id/photos');
   if(!req.file)
     return next(createError(400, 'no file'));
 
-  let ext = path.extname(req.file.originalname);
-
-  let params = {
-    ACL: 'public-read',
-    Bucket: 'olayers-staging',
-    Key: `${req.file.filename}${ext}`,
-    Body: fs.createReadStream(req.file.path),
-  };
   let tempPost = null;
   let tempPhoto = null;
-  Post.findById(req.params.postID)
-.catch(err => Promise.reject(createError(404, err.message)))
-.then(post => {
-  if(post.userID.toString() !== req.user._id.toString()) {
-    return Promise.reject(createError(401, 'User not authorized'));
-  }
-  tempPost = post;
-  return s3Promise(params);
-})
-.catch(err => err.status ? Promise.reject(err) : Promise.reject(createError(500, err.message)))
-.then(s3data => {
+  Post.findById(req.params.id)
+  .catch(err => Promise.reject(createError(404, err.message)))
+  .then(post => {
+    if(post.userID.toString() !== req.user._id.toString()) {
+      return Promise.reject(createError(401, 'User not authorized'));
+    }
+    tempPost = post;
+    return s3Promise({
+      ACL: 'public-read',
+      Bucket: process.env.AWS_BUCKET,
+      Key: `${req.file.filename}${path.extname(req.file.originalname)}`,
+      Body: fs.createReadStream(req.file.path),
+    });
+  })
+  .catch(err => err.status ? Promise.reject(err) : Promise.reject(createError(500, err.message)))
+  .then(s3data => {
 
-  del([`${dataDir}/*`]);
-  let photoData = {
-    name: req.body.name,
-    objectKey: s3data.Key,
-    imageURI: s3data.Location,
-    location: req.body.location,
-    dateTaken: req.body.dateTaken,
-    description: req.body.description,
-    userID: req.user._id.toString(),
-    postID: req.post._id.toString(),
-  };
-  return new Photo(photoData).save();
-})
-.then(photo => {
-  tempPhoto = photo;
-  tempPost.photoID = tempPhoto._id.toString();
-  return tempPost.save();
-})
-.then(() => res.json(tempPhoto))
-.catch(err => {
-  del([`${dataDir}/*`]);
-  next(err);
+    del([`${dataDir}/*`]);
+    let photoData = {
+      name: req.body.name,
+      objectKey: s3data.Key,
+      imageURI: s3data.Location,
+      location: req.body.location,
+      dateUploaded: req.body.dateUploaded,
+      description: req.body.description,
+      userID: req.user._id.toString(),
+      postID: req.body.postID.toString(),
+    };
+    return new Photo(photoData).save();
+  })
+  .then(photo => {
+    tempPhoto = photo;
+    tempPost.photoID = tempPhoto._id.toString();
+    return tempPost.save();
+  })
+  .then(() => res.json(tempPhoto))
+  .catch(err => {
+    del([`${dataDir}/*`]);
+    next(err);
+  });
 });
-};
-
-
-
 
 //deletes individual photo by ID
-photoRouter.delete('/api/photo/:id', bearerAuth, function(req, res, next){
-  debug('DELETE /api/photo/:id');
-  Photo.findbyId(req.params.photoID)
+photoRouter.delete('/api/photos/:id', bearerAuth, function(req, res, next){
+  debug('DELETE /api/photos/:id');
+  Photo.findById(req.params.id)
   .catch(err => Promise.reject(createError(404,err.message)))
   .then(photo => {
     if(photo.userID.toString() !==req.user._id.toString())

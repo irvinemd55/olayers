@@ -172,7 +172,7 @@ describe('testing post-router', function() {
     });
 
     it('should respond with 404 not found', done => {
-      superagent.get(`${baseURL}/api/post`)
+      superagent.get(`${baseURL}/api/po`)
       .set('Authorization', `Bearer ${this.tempToken}`)
       .then(done)
       .catch(err => {
