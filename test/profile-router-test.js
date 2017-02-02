@@ -162,7 +162,6 @@ describe('testing profile-router', function () {
         })
         .catch(done);
       });
-
     });
 
     describe('testing GET /api/profiles', function() {
@@ -210,6 +209,5 @@ describe('testing profile-router', function () {
         .catch(done);
       });
     });
-
   });
 });
