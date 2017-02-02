@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls ",
     "debug": "DEBUG=ol* npm run test",
     "lint": "./node_modules/eslint/bin/eslint.js .",
     "start": "node server.js"
