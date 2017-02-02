@@ -16,7 +16,7 @@ const profileSchema = mongoose.Schema({
   fan: {type: Boolean, required: true},
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
   posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'post'}],
-  profilePic: {type: mongoose.Schema.Types.ObjectId, ref: 'photo'},
+  profilePic: {type: mongoose.Schema.Types.ObjectId},
 });
 
 module.exports = mongoose.model('profile', profileSchema);

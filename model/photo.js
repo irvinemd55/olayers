@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const photoSchema = mongoose.Schema({
   name: {type: String, required: true},
-  dateTaken: {type: Date, required: true},
+  dateUploaded: {type: Date, required: true, default: Date.now},
   objectKey: {type: String, required: true, unique: true},
   imageURI: {type: String, required: true, unique: true},
   //event: {type: String},
