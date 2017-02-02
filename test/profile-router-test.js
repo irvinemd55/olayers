@@ -128,7 +128,7 @@ describe('testing profile-router', function () {
       });
 
       it('should resond with a 401 when no auth', (done) => {
-        let url = `${baseURL}/api/profiles/${this.tempProfile._id.toString()}`;
+        let url = `${baseURL}/api/profiles/me/myprofile`;
         superagent.get(url)
         .then(done)
         .catch(res => {
