@@ -152,7 +152,7 @@ describe('testing profile-router', function () {
       });
 
       it('should return a 404 when profile not found', (done) => {
-        let url = `${baseURL}/api/profiles/hackID`;
+        let url = `${baseURL}/api/profiles/me/hackID`;
         superagent.get(url)
         .set('authorization', `Bearer ${this.tempToken}`)
         .then(done)
@@ -162,6 +162,7 @@ describe('testing profile-router', function () {
         })
         .catch(done);
       });
+
     });
 
     describe('testing GET /api/profiles', function() {
@@ -186,7 +187,7 @@ describe('testing profile-router', function () {
         })
         .catch(done);
       });
-      
+
       it('should respond with 401', done => {
         superagent.get(`${baseURL}/api/profiles`)
         .set('Authorization', `Bearer badtoken`)
@@ -209,5 +210,6 @@ describe('testing profile-router', function () {
         .catch(done);
       });
     });
+
   });
 });
