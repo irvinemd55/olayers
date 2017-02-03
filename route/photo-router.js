@@ -72,7 +72,6 @@ photoRouter.post('/api/profiles/:id/photos', bearerAuth, upload.single('file'), 
       description: req.body.description,
       userID: req.user._id.toString(),
       profileID: req.body.profileID.toString(),
-      profilePic: req.body.profilePic,
     };
     return new Photo(photoData).save();
   })

@@ -30,7 +30,7 @@ profileRouter.post('/api/profiles', bearerAuth, jsonParser, function(req, res, n
     fan: req.body.fan,
     userID: req.user._id.toString(),
     posts: req.body.posts,
-    profilePic: req.body.profilePic,
+    profilePic: req.body.photoID,
   }).save()
   .then(profile => {
     res.json(profile);
